@@ -23,6 +23,8 @@
 #include "gamerules.h"
 #include "UserMessages.h"
 
+#include "game.h"
+
 LINK_ENTITY_TO_CLASS(weapon_mp5, CMP5);
 LINK_ENTITY_TO_CLASS(weapon_9mmAR, CMP5);
 
@@ -124,6 +126,10 @@ bool CMP5::Deploy()
 
 void CMP5::PrimaryAttack()
 {
+#ifndef CLIENT_DLL
+	int mp5_old_rate = sv_mp5_old_rate.value;
+	
+#endif
 	// don't fire underwater
 	if (m_pPlayer->pev->waterlevel == 3)
 	{
@@ -185,7 +191,8 @@ void CMP5::PrimaryAttack()
 	m_flNextPrimaryAttack = GetNextAttackDelay(0.1);
 
 	if (m_flNextPrimaryAttack < UTIL_WeaponTimeBase())
-		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.1;
+		if (sv_mp5_old_rate.value==0) m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.1;
+		if (sv_mp5_old_rate.value == 1) m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.09;
 
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
 }
