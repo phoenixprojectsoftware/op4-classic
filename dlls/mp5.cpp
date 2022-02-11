@@ -127,7 +127,7 @@ bool CMP5::Deploy()
 void CMP5::PrimaryAttack()
 {
 #ifndef CLIENT_DLL
-	int sv_mp5_old_rate = mp5_old_rate.value;
+	int MP5OldRate = mp5_old_rate.value;
 	
 #endif
 	// don't fire underwater
